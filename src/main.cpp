@@ -90,15 +90,15 @@ void setup()
     pinMode(HW_CD, INPUT_PULLUP);
     pinMode(HW_CL, INPUT_PULLUP);
     pinMode(HW_CR, INPUT_PULLUP);
-    pinMode(HW_DU, INPUT_PULLUP);
-    pinMode(HW_DD, INPUT_PULLUP);
-    pinMode(HW_DL, INPUT_PULLUP);
-    pinMode(HW_DR, INPUT_PULLUP);
+    // pinMode(HW_DU, INPUT_PULLUP);
+    // pinMode(HW_DD, INPUT_PULLUP);
+    // pinMode(HW_DL, INPUT_PULLUP);
+    // pinMode(HW_DR, INPUT_PULLUP);
     pinMode(HW_START, INPUT_PULLUP);
-    pinMode(HW_Z, INPUT_PULLUP);
-    pinMode(HW_R, INPUT_PULLUP);
+    // pinMode(HW_Z, INPUT_PULLUP);
+    // pinMode(HW_R, INPUT_PULLUP);
     pinMode(HW_L, INPUT_PULLUP);
-    pinMode(HW_EN, INPUT_PULLUP);
+    // pinMode(HW_EN, INPUT_PULLUP);
     pinMode(HW_RUMBLE, OUTPUT);
 #endif
 
@@ -145,9 +145,15 @@ void loop()
                 switch (c)
                 {
                     case 0: attachInterrupt(digitalPinToInterrupt(n64_in_dev[c].gpio_pin), n64_controller1_clock_edge, FALLING); break;
+#if (MAX_CONTROLLERS >= 2)
                     case 1: attachInterrupt(digitalPinToInterrupt(n64_in_dev[c].gpio_pin), n64_controller2_clock_edge, FALLING); break;
+#endif
+#if (MAX_CONTROLLERS >= 3)
                     case 2: attachInterrupt(digitalPinToInterrupt(n64_in_dev[c].gpio_pin), n64_controller3_clock_edge, FALLING); break;
+#endif
+#if (MAX_CONTROLLERS >= 4)
                     case 3: attachInterrupt(digitalPinToInterrupt(n64_in_dev[c].gpio_pin), n64_controller4_clock_edge, FALLING); break;
+#endif
                 }
                 n64_in_dev[c].interrupt_attached = true;
             }

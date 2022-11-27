@@ -20,41 +20,43 @@
 
 /* N64 LIB */
 #define MAX_CONTROLLERS 4             //Max is 4
-#define MAX_MICE 4                    //0 to disable N64 mouse support. Must be <= MAX_CONTROLLERS
-#define MAX_KB 4                      //0 to disable N64 randnet keyboard support. Must be <= MAX_CONTROLLERS
-#define MAX_GBROMS 10                 //ROMS over this will just get ignored
+#define MAX_MICE 0                    //0 to disable N64 mouse support. Must be <= MAX_CONTROLLERS
+#define MAX_KB 0                      //0 to disable N64 randnet keyboard support. Must be <= MAX_CONTROLLERS
+#define MAX_GBROMS 0                 //ROMS over this will just get ignored
 #define ENABLE_I2C_CONTROLLERS 0      //Received button presses over I2C, useful for integrating with a rasp pi etc.
 #define ENABLE_HARDWIRED_CONTROLLER 1 //Ability to hardware a N64 controller into the usb64.
 #define PERI_CHANGE_TIME 750          //Milliseconds to simulate a peripheral changing time. Needed for some games.
 
 /* PIN MAPPING */
-#define N64_CONSOLE_SENSE 37
-#define N64_CONTROLLER_1_PIN 36
-#define N64_CONTROLLER_2_PIN 35
-#define N64_CONTROLLER_3_PIN 34
-#define N64_CONTROLLER_4_PIN 33
-#define N64_FRAME 23 //Pulses high each time N64 console requests input. Presumably related to frames.
+#define N64_CONSOLE_SENSE 4
+#define N64_CONTROLLER_1_PIN 5
+#define N64_CONTROLLER_2_PIN 2
+#define N64_CONTROLLER_3_PIN 3
+#define N64_CONTROLLER_4_PIN 4
+#define N64_FRAME 29 //Pulses high each time N64 console requests input. Presumably related to frames.
 #define USER_LED_PIN 13
 
 //Hardwired interface. All digital inputs are pulled up, active low.
-#define HW_A 2
-#define HW_B 3
-#define HW_CU 4
-#define HW_CD 5
-#define HW_CL 6
-#define HW_CR 7
-#define HW_DU 8
-#define HW_DD 9
-#define HW_DL 10
-#define HW_DR 11
+#define HW_A 6
+#define HW_B 7
+#define HW_CU 8
+#define HW_CD 9
+#define HW_CL 10
+#define HW_CR 11
+// #define HW_DU 8
+// #define HW_DD 9
+// #define HW_DL 10
+// #define HW_DR 11
 #define HW_START 12
-#define HW_Z 28
-#define HW_R 29
-#define HW_L 30
-#define HW_RUMBLE 31 //Output, 1 when should be rumbling
-#define HW_EN 32 //Active low, pulled high
-#define HW_X 24 //Analog input, 0V to VCC. VCC/2 centre
-#define HW_Y 25 //Analog input, 0V to VCC. VCC/2 centre
+#define HW_Z 14 // Now an analog thing
+#define HW_R 15 // Also an analog thing
+#define HW_L 16 // Stays digital
+#define HW_RUMBLE 22 //Output, 1 when should be rumbling
+#define HW_EN 21 //Active low, pulled high
+#define HW_X 17 //Analog input, 0V to VCC. VCC/2 centre
+#define HW_Y 18 //Analog input, 0V to VCC. VCC/2 centre
+#define HW_DX 19
+#define HW_DY 20
 
 /* FILESYSTEM */
 #define MAX_FILENAME_LEN 256
@@ -74,7 +76,7 @@
 #define MAG_AT_45DEG 1.1f      //Octagonal shape has a larger magnitude at the 45degree points. 1.1 times larger seems about right
 
 /* TFT DISPLAY */
-#define ENABLE_TFT_DISPLAY 1
+#define ENABLE_TFT_DISPLAY 0
 #define TFT_ROTATION 1 //0-3
 #define TFT_DC 40
 #define TFT_CS 41

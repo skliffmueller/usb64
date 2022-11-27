@@ -42,13 +42,13 @@ KeyboardController kb2(usbh);
 KeyboardController kb3(usbh);
 KeyboardController kb4(usbh);
 
-JoystickController *gamecontroller[] = {&joy1, &joy2, &joy3, &joy4, &joy5, &joy6, &joy7, &joy8};
-MouseController *mousecontroller[] = {&mouse1, &mouse2, &mouse3, &mouse4};
-KeyboardController *kbcontroller[] = {&kb1, &kb2, &kb3, &kb4};
+JoystickController *gamecontroller[] = {&joy1};
+MouseController *mousecontroller[] = {};
+KeyboardController *kbcontroller[] = {};
 
 uint32_t hardwired1;
 
-#define MAX_USB_CONTROLLERS (8)
+#define MAX_USB_CONTROLLERS (0)
 static input input_devices[MAX_CONTROLLERS];
 static uint8_t kb_keys_pressed[RANDNET_MAX_BUTTONS];
 
@@ -122,8 +122,8 @@ void input_update_input_devices()
 
 #if (ENABLE_HARDWIRED_CONTROLLER >=1)
     //Find hardwired game controller
-    if (digitalRead(HW_EN) == 0)
-    {
+    //if (digitalRead(HW_EN) == 0)
+    //{
         //Hardwired will always overwrite the first slot
         if (input_devices[0].driver != &hardwired1)
         {
@@ -132,7 +132,7 @@ void input_update_input_devices()
             debug_print_status("[INPUT] Registered hardwired gamecontroller to slot %u\n", 0);
             tft_flag_update();
         }
-    }
+    //}
 #endif
 
     //Find new game controllers
@@ -607,6 +607,7 @@ uint16_t input_get_state(uint8_t id, void *response, bool *combo_pressed)
     {
         n64_buttonmap *state = (n64_buttonmap *)response;
         state->dButtons = 0;
+        uint16_t tempDirection = 0;
 
         if (!digitalRead(HW_A)) state->dButtons |= N64_A;
         if (!digitalRead(HW_B)) state->dButtons |= N64_B;
@@ -614,14 +615,16 @@ uint16_t input_get_state(uint8_t id, void *response, bool *combo_pressed)
         if (!digitalRead(HW_CD)) state->dButtons |= N64_CD;
         if (!digitalRead(HW_CL)) state->dButtons |= N64_CL;
         if (!digitalRead(HW_CR)) state->dButtons |= N64_CR;
-        if (!digitalRead(HW_DU)) state->dButtons |= N64_DU;
-        if (!digitalRead(HW_DD)) state->dButtons |= N64_DD;
-        if (!digitalRead(HW_DL)) state->dButtons |= N64_DL;
-        if (!digitalRead(HW_DR)) state->dButtons |= N64_DR;
+        tempDirection = analogRead(HW_DY);
+        if (tempDirection > 819) state->dButtons |= N64_DU;
+        if (tempDirection < 192) state->dButtons |= N64_DD;
+        tempDirection = analogRead(HW_DX);
+        if (tempDirection < 192) state->dButtons |= N64_DL;
+        if (tempDirection > 819) state->dButtons |= N64_DR;
         if (!digitalRead(HW_START)) state->dButtons |= N64_ST;
-        if (!digitalRead(HW_Z)) state->dButtons |= N64_Z;
+        if (analogRead(HW_Z) > 9) state->dButtons |= N64_Z;
         if (!digitalRead(HW_L)) state->dButtons |= N64_LB;
-        if (!digitalRead(HW_R)) state->dButtons |= N64_RB;
+        if (analogRead(HW_R) > 9) state->dButtons |= N64_RB;
         
         //10bit ADC
         state->x_axis = analogRead(HW_X) * 200 / 1024 - 100; //+/-100
@@ -689,7 +692,7 @@ bool input_is_connected(int id)
 #if (ENABLE_HARDWIRED_CONTROLLER >=1)
     else if (input_is_hw_gamecontroller(id))
     {
-        if (digitalRead(HW_EN) == 0)
+        //if (digitalRead(HW_EN) == 0)
             connected = true;
     }
 #endif
